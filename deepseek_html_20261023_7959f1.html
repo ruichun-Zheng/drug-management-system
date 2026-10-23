@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>科室药品管理 · 手机版</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #f2f6fc;
+            margin: 0;
+            padding: 10px 8px 20px;
+            color: #1e2a3e;
+            font-size: 14px;
+            -webkit-text-size-adjust: 100%;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 标题区域 —— 手机上紧凑 */
+        h1 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 0 0 0.2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            line-height: 1.3;
+        }
+        h1 span {
+            background: #1e3a8a;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.15rem 0.55rem;
+            border-radius: 20px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+        .subhead {
+            color: #4b5e77;
+            margin-bottom: 0.9rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 0.6rem;
+            font-size: 0.72rem;
+            line-height: 1.4;
+        }
+
+        /* 统计栏 —— 两列排布，紧凑 */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 8px;
+            margin-bottom: 0.9rem;
+            background: white;
+            padding: 0.6rem 0.8rem;
+            border-radius: 16px;
+            box-shadow: 0 3px 8px rgba(0,20,50,0.04);
+            border: 1px solid #e3ecf7;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: #4b5e77;
+            gap: 4px;
+            min-width: 0;
+        }
+        .stat-badge {
+            background: #eef4ff;
+            border-radius: 20px;
+            padding: 0.15rem 0.55rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            font-size: 0.78rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .stat-badge.warning {
+            background: #fff4e5;
+            color: #b45309;
+        }
+        .stat-badge.danger {
+            background: #fee9e6;
+            color: #b91c1c;
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0, 20, 40, 0.06);
+            padding: 0.9rem 0.85rem 1.1rem;
+            border: 1px solid #e1ebf9;
+            margin-bottom: 0.9rem;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 表单 —— 全宽竖排 */
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            margin-bottom: 0.6rem;
+            background: #f8fcff;
+            padding: 0.8rem 0.75rem;
+            border-radius: 14px;
+            border: 1px solid #d7e6fc;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .field label {
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 600;
+            color: #49739e;
+            margin-bottom: 0.2rem;
+        }
+        .field input {
+            background: white;
+            border: 1.5px solid #cddff5;
+            border-radius: 12px;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.88rem;
+            outline: none;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .field input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        }
+
+        /* 按钮 */
+        .btn {
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 0.65rem 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            background: white;
+            border: 1.5px solid #cddff5;
+            color: #1e3a8a;
+            white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: #1e3a8a;
+            border: 1.5px solid #1e3a8a;
+            color: white;
+            width: 100%;
+        }
+        .btn-primary:active {
+            background: #2563eb;
+        }
+        .btn-sm {
+            padding: 0.42rem 0.7rem;
+            font-size: 0.72rem;
+            border-radius: 20px;
+            flex: 1;
+            min-width: 0;
+        }
+        .btn-danger-outline {
+            border-color: #f3c1bb;
+            color: #b91c1c;
+            background: white;
+        }
+        .btn-danger-outline:active {
+            background: #fff1f0;
+        }
+        .btn-success-outline {
+            border-color: #b9dfc9;
+            color: #0a6e3a;
+            background: white;
+        }
+        .btn-success-outline:active {
+            background: #e9f9ef;
+        }
+        .btn-outline {
+            background: white;
+            border: 1.5px solid #b8cbe2;
+            color: #1e3a8a;
+        }
+        .btn-outline:active {
+            background: #eef4ff;
+        }
+
+        /* 手机卡片式药品列表 */
+        .drug-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            margin-top: 0.4rem;
+        }
+        .drug-item {
+            background: #fbfdff;
+            border: 1px solid #e3edfa;
+            border-radius: 14px;
+            padding: 0.6rem 0.7rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+        .drug-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .drug-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #0c1e33;
+            line-height: 1.3;
+            word-break: break-word;
+            flex: 1;
+        }
+        .quantity-badge {
+            font-weight: 700;
+            font-size: 1rem;
+            background: #eef4ff;
+            border-radius: 16px;
+            padding: 0.15rem 0.7rem;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+            color: #0f2a4a;
+            flex-shrink: 0;
+        }
+        .drug-item-mid {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .expiry-badge {
+            font-size: 0.7rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            background: #f0f6ff;
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            color: #2a4b72;
+            line-height: 1.4;
+        }
+        .expiry-warning {
+            background: #fff1db;
+            color: #b45309;
+            font-weight: 600;
+        }
+        .expiry-danger {
+            background: #ffe7e3;
+            color: #b91c1c;
+            font-weight: 700;
+        }
+        .drug-item-actions {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .drug-item-actions .btn-sm {
+            flex: 1;
+        }
+
+        .empty-row {
+            padding: 1.6rem 0.5rem;
+            text-align: center;
+            color: #7a8fa8;
+            font-style: italic;
+            font-size: 0.82rem;
+        }
+
+        .hint {
+            font-size: 0.68rem;
+            color: #5d7a9c;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.3rem;
+            background: #f3f9ff;
+            padding: 0.45rem 0.7rem;
+            border-radius: 10px;
+            line-height: 1.4;
+        }
+
+        /* 提示条 */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2a3e;
+            color: white;
+            padding: 0.65rem 1.3rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            z-index: 999;
+            white-space: nowrap;
+            max-width: 92vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .toast.show {
+            opacity: 1;
+            bottom: 26px;
+        }
+        .toast.warning { background: #b45309; }
+        .toast.danger { background: #b91c1c; }
+
+        .sort-indicator {
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #1e3a8a;
+            font-size: 0.72rem;
+            background: #eef4ff;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .sort-indicator:active {
+            background: #dbe8ff;
+        }
+
+        .backup-bar {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.7rem;
+        }
+        .backup-bar .btn {
+            flex: 1;
+            font-size: 0.7rem;
+            padding: 0.5rem 0.4rem;
+        }
+
+        /* 横屏/平板（宽一点时）恢复两列统计 */
+        @media (min-width: 480px) {
+            .stats-bar {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+
+        /* 桌面/大屏兼容（保留原表格感觉）—— 仅在 ≥700px 时启用表格布局 */
+        @media (min-width: 700px) {
+            body {
+                padding: 1.5rem;
+                font-size: 14px;
+            }
+            .container { max-width: 1200px; }
+            h1 { font-size: 1.6rem; }
+            h1 span { font-size: 0.9rem; padding: 0.2rem 0.8rem; }
+            .subhead { font-size: 0.9rem; margin-bottom: 1.5rem; }
+            .stats-bar { display: flex; flex-wrap: wrap; gap: 1.2rem; padding: 1rem 1.5rem; border-radius: 24px; }
+            .stat-item { font-size: 0.9rem; gap: 0.6rem; }
+            .stat-badge { font-size: 0.9rem; padding: 0.25rem 0.9rem; }
+            .card { padding: 1.6rem 1.6rem 1.8rem; border-radius: 24px; }
+            .card-title { font-size: 1.1rem; }
+            .form-row {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: flex-end;
+                gap: 1rem 1.2rem;
+                padding: 1rem 1.2rem;
+                border-radius: 20px;
+            }
+            .field { flex: 1 1 150px; min-width: 140px; }
+            .btn-primary { width: auto; }
+            .drug-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 0.8rem;
+            }
+            .btn-sm { font-size: 0.8rem; padding: 0.45rem 0.9rem; }
+            .toast { font-size: 0.9rem; padding: 0.85rem 1.8rem; }
+            .backup-bar .btn { flex: none; font-size: 0.82rem; padding: 0.55rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        💊 科室药品管理
+        <span>数量 · 效期</span>
+    </h1>
+    <div class="subhead">
+        实时跟踪药品数量与有效期 · 近效期（≤4个月）自动提醒 · 加减数量即时生效 · 数据自动保存在本机
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-item">📋 药品 <span class="stat-badge" id="totalDrugs">0</span></div>
+        <div class="stat-item">⚠️ 近效期 <span class="stat-badge warning" id="nearExpiryCount">0</span></div>
+        <div class="stat-item">🔴 已过期 <span class="stat-badge danger" id="expiredCount">0</span></div>
+        <div class="stat-item">📦 库存 <span class="stat-badge" id="totalQuantity">0</span></div>
+    </div>
+
+    <!-- 添加药品卡片 -->
+    <div class="card">
+        <div class="card-title">➕ 添加新药品</div>
+        <div class="form-row">
+            <div class="field">
+                <label>药品名称</label>
+                <input type="text" id="newName" placeholder="例如：阿莫西林胶囊" maxlength="40">
+            </div>
+            <div class="field">
+                <label>数量</label>
+                <input type="number" id="newQuantity" min="0" value="0" step="1" inputmode="numeric">
+            </div>
+            <div class="field">
+                <label>有效期至</label>
+                <input type="date" id="newExpiry">
+            </div>
+            <button class="btn btn-primary" id="addBtn">+ 添加药品</button>
+        </div>
+        <div class="hint">
+            💡 <b style="color:#b45309;">黄色：4个月内到期</b> · <b style="color:#b91c1c;">红色：已过期</b>
+        </div>
+    </div>
+
+    <!-- 药品列表卡片 -->
+    <div class="card">
+        <div class="card-title">
+            <span>📋 药品清单</span>
+            <span class="sort-indicator" id="sortByExpiry">🔄 按效期排序</span>
+        </div>
+        <div class="drug-list" id="drugList"></div>
+        <!-- 备份操作 -->
+        <div class="backup-bar">
+            <button class="btn btn-outline" id="exportBtn">📤 导出备份</button>
+            <button class="btn btn-outline" id="importBtn">📥 导入备份</button>
+            <input type="file" id="importFile" accept=".json" style="display:none;">
+        </div>
+        <div class="hint" style="margin-top: 0.6rem;">
+            💾 数据已自动保存在本机；换手机/换浏览器请用导出/导入备份。
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    (function() {
+        const STORAGE_KEY = 'dept_drug_manager_v1';
+        let drugs = [];
+        let sortByExpiryAsc = true;
+
+        const drugListEl = document.getElementById('drugList');
+        const totalDrugsSpan = document.getElementById('totalDrugs');
+        const nearExpiryCountSpan = document.getElementById('nearExpiryCount');
+        const expiredCountSpan = document.getElementById('expiredCount');
+        const totalQuantitySpan = document.getElementById('totalQuantity');
+        const newNameInput = document.getElementById('newName');
+        const newQuantityInput = document.getElementById('newQuantity');
+        const newExpiryInput = document.getElementById('newExpiry');
+        const addBtn = document.getElementById('addBtn');
+        const sortBtn = document.getElementById('sortByExpiry');
+        const toast = document.getElementById('toast');
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+        }
+
+        function daysUntilExpiry(expiryDateStr) {
+            if (!expiryDateStr) return Infinity;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const expiry = new Date(expiryDateStr);
+            if (isNaN(expiry.getTime())) return Infinity;
+            expiry.setHours(0,0,0,0);
+            return Math.floor((expiry - today) / 86400000);
+        }
+
+        function fourMonthsFromToday() {
+            const d = new Date(); d.setHours(0,0,0,0);
+            d.setMonth(d.getMonth() + 4);
+            return d;
+        }
+
+        function isNearExpiry(expiryDateStr) {
+            if (!expiryDateStr) return false;
+            const expiry = new Date(expiryDateStr);
+            if (isNaN(expiry.getTime())) return false;
+            expiry.setHours(0,0,0,0);
+            const today = new Date(); today.setHours(0,0,0,0);
+            if (expiry < today) return false;
+            const limit = fourMonthsFromToday();
+            return expiry <= limit;
+        }
+
+        function getExpiryInfo(expiryDateStr) {
+            const days = daysUntilExpiry(expiryDateStr);
+            if (!expiryDateStr) return { text: '无有效期', className: '', days: Infinity };
+            if (days < 0) return { text: `已过期 ${Math.abs(days)} 天`, className: 'expiry-danger', days };
+            if (days === 0) return { text: '今天到期', className: 'expiry-danger', days: 0 };
+            if (isNearExpiry(expiryDateStr)) return { text: `剩 ${days} 天（近效期）`, className: 'expiry-warning', days };
+            return { text: `剩 ${days} 天`, className: '', days };
+        }
+
+        let toastTimer = null;
+        function showToast(message, type = 'info') {
+            toast.textContent = message;
+            toast.className = 'toast show ' + (type === 'warning' ? 'warning' : type === 'danger' ? 'danger' : '');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { toast.className = 'toast'; }, 2200);
+        }
+
+        function saveToLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(drugs)); }
+
+        function loadFromLocal() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) {
+                        drugs = parsed.filter(d => d && typeof d === 'object' && d.id && d.name).map(d => ({
+                            id: d.id || generateId(),
+                            name: d.name || '未命名',
+                            quantity: typeof d.quantity === 'number' ? d.quantity : 0,
+                            expiryDate: d.expiryDate || ''
+                        }));
+                    }
+                } catch (e) { console.warn('读取存储失败'); }
+            }
+            if (!drugs.length) {
+                drugs = [
+                    { id: generateId(), name: '阿莫西林胶囊', quantity: 45, expiryDate: getDateOffset(60) },
+                    { id: generateId(), name: '布洛芬缓释胶囊', quantity: 28, expiryDate: getDateOffset(100) },
+                    { id: generateId(), name: '胰岛素注射液', quantity: 12, expiryDate: getDateOffset(-5) },
+                    { id: generateId(), name: '生理盐水 0.9%', quantity: 60, expiryDate: getDateOffset(200) },
+                ];
+            }
+        }
+
+        function getDateOffset(offsetDays) {
+            const d = new Date(); d.setDate(d.getDate() + offsetDays);
+            return d.toISOString().slice(0,10);
+        }
+
+        function updateQuantity(id, delta) {
+            const drug = drugs.find(d => d.id === id);
+            if (!drug) return;
+            const newQty = drug.quantity + delta;
+            if (newQty < 0) { showToast('数量不能为负数', 'warning'); return; }
+            drug.quantity = newQty;
+            saveToLocal();
+            renderList();
+            if (newQty === 0) showToast(`「${drug.name}」数量已归零`, 'info');
+        }
+
+        function deleteDrug(id) {
+            const drug = drugs.find(d => d.id === id);
+            if (!drug) return;
+            if (!confirm(`确定要删除「${drug.name}」吗？`)) return;
+            drugs = drugs.filter(d => d.id !== id);
+            saveToLocal();
+            renderList();
+            showToast(`已删除「${drug.name}」`, 'info');
+        }
+
+        function addNewDrug() {
+            const name = newNameInput.value.trim();
+            const quantityRaw = newQuantityInput.value.trim();
+            const expiry = newExpiryInput.value;
+
+            if (!name) { showToast('请输入药品名称', 'warning'); newNameInput.focus(); return; }
+            let quantity = parseInt(quantityRaw, 10);
+            if (isNaN(quantity) || quantity < 0) { showToast('数量必须为0或正整数', 'warning'); newQuantityInput.value = 0; newQuantityInput.focus(); return; }
+            if (expiry) {
+                if (isNaN(new Date(expiry).getTime())) { showToast('有效期格式不正确', 'warning'); return; }
+            }
+            if (drugs.some(d => d.name === name)) {
+                if (!confirm(`已存在同名药品「${name}」，确定继续添加吗？`)) return;
+            }
+
+            drugs.push({ id: generateId(), name, quantity, expiryDate: expiry || '' });
+            saveToLocal();
+            newNameInput.value = ''; newQuantityInput.value = 0; newExpiryInput.value = '';
+            newNameInput.focus();
+            renderList();
+            showToast(`已添加「${name}」`, 'info');
+        }
+
+        function renderList() {
+            const sorted = [...drugs];
+            sorted.sort((a, b) => {
+                const daysA = a.expiryDate ? daysUntilExpiry(a.expiryDate) : Infinity;
+                const daysB = b.expiryDate ? daysUntilExpiry(b.expiryDate) : Infinity;
+                return sortByExpiryAsc ? daysA - daysB : daysB - daysA;
+            });
+
+            drugListEl.innerHTML = '';
+            if (sorted.length === 0) {
+                drugListEl.innerHTML = `<div class="empty-row">暂无药品，请添加</div>`;
+            } else {
+                sorted.forEach(drug => {
+                    const expiryInfo = getExpiryInfo(drug.expiryDate);
+                    let dateDisplay = drug.expiryDate || '未设置';
+                    if (drug.expiryDate) {
+                        const d = new Date(drug.expiryDate);
+                        if (!isNaN(d.getTime())) dateDisplay = d.toISOString().slice(0,10);
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = 'drug-item';
+
+                    // 上：名称 + 数量
+                    const top = document.createElement('div');
+                    top.className = 'drug-item-top';
+                    const nameEl = document.createElement('div');
+                    nameEl.className = 'drug-name';
+                    nameEl.textContent = drug.name;
+                    const qtyEl = document.createElement('span');
+                    qtyEl.className = 'quantity-badge';
+                    qtyEl.textContent = drug.quantity;
+                    top.appendChild(nameEl);
+                    top.appendChild(qtyEl);
+
+                    // 中：有效期
+                    const mid = document.createElement('div');
+                    mid.className = 'drug-item-mid';
+                    const expiryEl = document.createElement('span');
+                    expiryEl.className = `expiry-badge ${expiryInfo.className}`;
+                    expiryEl.innerHTML = `${dateDisplay} <span style="font-weight:400;">${expiryInfo.text}</span>`;
+                    mid.appendChild(expiryEl);
+
+                    // 下：操作按钮
+                    const actions = document.createElement('div');
+                    actions.className = 'drug-item-actions';
+
+                    const minusBtn = document.createElement('button');
+                    minusBtn.className = 'btn btn-sm btn-outline';
+                    minusBtn.textContent = '−1';
+                    minusBtn.addEventListener('click', () => updateQuantity(drug.id, -1));
+
+                    const plusBtn = document.createElement('button');
+                    plusBtn.className = 'btn btn-sm btn-success-outline';
+                    plusBtn.textContent = '+1';
+                    plusBtn.addEventListener('click', () => updateQuantity(drug.id, 1));
+
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'btn btn-sm btn-danger-outline';
+                    delBtn.textContent = '删除';
+                    delBtn.addEventListener('click', () => deleteDrug(drug.id));
+
+                    actions.appendChild(minusBtn);
+                    actions.appendChild(plusBtn);
+                    actions.appendChild(delBtn);
+
+                    item.appendChild(top);
+                    item.appendChild(mid);
+                    item.appendChild(actions);
+                    drugListEl.appendChild(item);
+                });
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = drugs.length;
+            let nearExpiry = 0, expired = 0, totalQty = 0;
+            drugs.forEach(drug => {
+                totalQty += drug.quantity || 0;
+                if (drug.expiryDate) {
+                    const days = daysUntilExpiry(drug.expiryDate);
+                    if (days < 0) expired++;
+                    else if (isNearExpiry(drug.expiryDate)) nearExpiry++;
+                }
+            });
+            totalDrugsSpan.textContent = total;
+            nearExpiryCountSpan.textContent = nearExpiry;
+            expiredCountSpan.textContent = expired;
+            totalQuantitySpan.textContent = totalQty;
+        }
+
+        function toggleSort() {
+            sortByExpiryAsc = !sortByExpiryAsc;
+            renderList();
+            showToast(sortByExpiryAsc ? '按效期从近到远' : '按效期从远到近', 'info');
+        }
+
+        // ---------- 导出/导入备份 ----------
+        function exportBackup() {
+            const dataStr = JSON.stringify(drugs, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `药品备份_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('备份已导出', 'info');
+        }
+
+        function importBackup(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) throw new Error('格式错误');
+                    const cleaned = imported.filter(d => d && d.name).map(d => ({
+                        id: d.id || generateId(),
+                        name: d.name,
+                        quantity: typeof d.quantity === 'number' ? d.quantity : 0,
+                        expiryDate: d.expiryDate || ''
+                    }));
+                    if (!confirm(`即将导入 ${cleaned.length} 条药品数据，将覆盖当前数据，确定吗？`)) return;
+                    drugs = cleaned;
+                    saveToLocal();
+                    renderList();
+                    showToast(`成功导入 ${cleaned.length} 条数据`, 'info');
+                } catch (err) {
+                    showToast('导入失败：文件格式不正确', 'danger');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function init() {
+            loadFromLocal();
+            renderList();
+            addBtn.addEventListener('click', addNewDrug);
+            sortBtn.addEventListener('click', toggleSort);
+            newNameInput.addEventListener('keypress', e => { if (e.key === 'Enter') addNewDrug(); });
+            newQuantityInput.addEventListener('keypress', e => { if (e.key === 'Enter') addNewDrug(); });
+            exportBtn.addEventListener('click', exportBackup);
+            importBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', (e) => {
+                if (e.target.files.length) { importBackup(e.target.files[0]); importFile.value = ''; }
+            });
+            window.addEventListener('beforeunload', saveToLocal);
+        }
+        init();
+    })();
+</script>
+</body>
+</html>
